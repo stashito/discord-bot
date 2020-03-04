@@ -7,7 +7,7 @@ from discord.voice_client import VoiceClient
 
 
 BOT_PREFIX = ("carnal, ")
-TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.XkX7ww.pm3kFzzpN6fEuPRF4gekpy9V6wg"
+TOKEN = "TOKEN"
 
 bot = Bot(command_prefix=BOT_PREFIX)
 
