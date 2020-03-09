@@ -1,13 +1,20 @@
-import random
-import discord
-from discord.ext.commands import Bot
-import asyncio
-from discord.voice_client import VoiceClient
-# import pynacl
+# Developers: Stashito, Thinkr3, Dondischj
+# Feautures: Website, define, censorship, wordcount, count
+# Developing Feautures: Follow, count
+# Depricated Feautures: Speak, translate, synonymize, antonymize
+# Last Worked On: 08/03/2020
 
+import random, discord, asyncio
+from discord.ext.commands import Bot
+from discord.ext import tasks
+from PyDictionary import PyDictionary
+from discord.voice_client import VoiceClient
+from sys import stdout
+
+dictionary=PyDictionary()
 
 BOT_PREFIX = ("carnal, ")
-TOKEN = "TOKEN"
+TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.XmPMTw.0yIT8h1nsj4ncXFw29iv8GqCk1Q"
 
 bot = Bot(command_prefix=BOT_PREFIX)
 
@@ -27,13 +34,7 @@ async def website(ctx): #if someone writes 'carnal, website'
     await ctx.send(str(random.choice(lines)))
 
 
-@bot.command(pass_context=True)
-async def count(ctx, arg):
-    await ctx.send(arg)
-
-
-censored = {'nigger':'good samaritan',
-            'Hitler':'fopdoogle',
+censored = {'Hitler':'fopdoogle',
             'dick':'doodle',
             'cock':'doodle',
             'penis':'doodle',
@@ -56,6 +57,84 @@ censored = {'nigger':'good samaritan',
             'phuck':'balderdash',
             'joe':'joe mama'}
 
+@bot.command(pass_context=True)
+async def define(ctx, arg):
+    for i in dictionary.meaning(arg):
+        print(i)
+    await ctx.send(dictionary.meaning(arg))
+
+#API has no words, sucks.
+# @bot.command(pass_context=True)
+# async def synonymize(ctx, arg):
+#     await ctx.send(dictionary.synonym(arg))
+#
+# @bot.command(pass_context=True)
+# async def antonymize(ctx, arg):
+#     await ctx.send(dictionary.antonym(arg))
+
+#google translate free API depricated, now a paid service.
+# speaking = False
+# language = 'es'
+# @bot.command(pass_context=True)
+# async def speak(ctx, arg):
+#     global speaking, language
+#     speaking = True
+#     language = arg
+#     await ctx.send("Now speaking " + arg + "!")
+#
+# @bot.command(pass_context=True)
+# async def stop(ctx, arg):
+#     global speaking
+#     if arg == "speaking":
+#         speaking = False
+
+LIMIT = 1000000
+
+@bot.command(pass_context=True)
+async def count(ctx, arg):
+    oldest = ""
+    user_count = {}
+    count = 0
+    last_message = ""
+    async for message in ctx.channel.history(limit=LIMIT):
+        if str(arg) in message.content:
+            if message.author.name not in user_count:
+                user_count[message.author.name] = 0
+            user_count[message.author.name] += message.content.count(str(arg))
+            oldest = message.created_at
+        count += 1
+        stdout.write("\r Parsed through messages: " + str(count))
+        stdout.flush()
+    stdout.write("\n")
+
+    user_count = {k: v for k, v in sorted(user_count.items(), key=lambda item: item[1])}
+    results = "========== " + arg + " ==========\n"
+    for i, j in user_count.items():
+        results += i + ": " + str(j) + "\n"
+    await ctx.send(results)
+    # await ctx.send(oldest)
+
+@bot.command(pass_context=True)
+async def messages(ctx):
+    user_count = {}
+    count = 0
+    async for message in ctx.channel.history(limit=LIMIT):
+        if message.author.name not in user_count:
+            user_count[message.author.name] = 0
+        user_count[message.author.name] += 1
+        count += 1
+        stdout.write("\r Parsed through messages: " + str(count))
+        stdout.flush()
+    stdout.write("\n")
+
+    user_count = {k: v for k, v in sorted(user_count.items(), key=lambda item: item[1])}
+    results = "========== Messages per User ==========\n"
+    for i, j in user_count.items():
+        results += i + ": " + str(j) + "\n"
+    await ctx.send(results)
+
+
+
 
 @bot.event
 async def on_message(message):
@@ -65,7 +144,7 @@ async def on_message(message):
     bad = False
     new_sentence = " "
     for word, replacement in censored.items():
-        if word in message.content:
+        if word in message.content and ("carnal, " not in message.content):
             new_sentence = message.content.replace(word, replacement)
             bad = True
 
@@ -74,52 +153,56 @@ async def on_message(message):
         await message.delete(delay=None)
         bad = False
 
+        # Google API not working anymore, its a paid service now. $1 USD per 50,000 characters translated.
+    # if speaking:
+    #     words = message.content.split(" ")
+    #     print(words)
+    #     for i in words:
+    #         print(i)
+    #         await message.channel.send(dictionary.translate(i, language))
     #keep this at the end
     await bot.process_commands(message)
 
 
-follow = None
-
-@bot.command(pass_context=True)
-async def follow(ctx, arg):
-    global follow
-
-    user_mapping = {}
-
-    for guild in bot.guilds:
-            for member in guild.members:
-                user_mapping[member] = member.mention
-
-    for key, value in user_mapping.items():
-        if str(value) == arg.replace('!', ''):
-            follow = key
-    print("The follow command Works")
 
 
-@bot.command(pass_context=True)
-async def come(ctx):
-    #initiliazles the the channel that the user is in.
-    #Original Code: ctx.author.voice.channel
-    channel = follow.voice.channel
-    #joins to the user "Follow".
-    await channel.connect()
+# follow = None
+# isFollowing = False
+#
+# @bot.command(pass_context=True)
+# async def follow(ctx, arg):
+#     global follow
+#     user_mapping = {}
+#
+#     #makes a 2d arrays that assigns mention to userID.
+#     for guild in bot.guilds:
+#             for member in guild.members:
+#                 user_mapping[member] = member.mention
+#
+#     for key, value in user_mapping.items():
+#         if str(value) == arg.replace('!', ''):
+#             follow = key
+#             come.start()
+#             print("happened")
+#     print("The follow command Works")
+
+ # @bot.command(pass_context=True)
+ # async def stop(ctx, arg):
+ #     if arg == "following":
+ #         isFollowing = False
+
+#
+# @tasks.loop(seconds=5.0)
+# async def come():
+#     print(True)
+#     print(follow.voice.channel)
+#     #joins to the user "Follow".
+#     await follow.voice.channel.connect()
 
 #async def followUser():
     #voiceChannel = discord.follow.
     #await voiceChannel.join();
 
 
-    #Works only when dictionary api is downloaded
-#    if message.content.startswith('carnal, define '):
-#        msg = ""
-#        words = message.content.split('\n')
-#        for i in words:
-#            msg.join(dictionary.define(i))
-#        message.channel.send(msg)
-
-
-
-# main
-# bot.bg_task = loop.create_task(followUser())
 
 bot.run(TOKEN)
