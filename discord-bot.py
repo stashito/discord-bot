@@ -14,7 +14,7 @@ from sys import stdout
 dictionary=PyDictionary()
 
 BOT_PREFIX = ("carnal, ")
-TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.XmPMTw.0yIT8h1nsj4ncXFw29iv8GqCk1Q"
+TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.Xmbelg.ASbGWSJ1pH8lCzdId3qoMnrqhyU"
 
 bot = Bot(command_prefix=BOT_PREFIX)
 
@@ -34,28 +34,59 @@ async def website(ctx): #if someone writes 'carnal, website'
     await ctx.send(str(random.choice(lines)))
 
 
-censored = {'Hitler':'fopdoogle',
+censored = {'Hitler':'fopdoodle',
             'dick':'doodle',
             'cock':'doodle',
             'penis':'doodle',
+            'ween':'doodle',
             'anus':'doodle',
             'mother fucker':'dad',
             'pendejo':'squiggle',
             'fuck':'tarnation',
+            'faggot':'happy',
+            'murder':'compliment',
+            'black man':'good samaritan',
+            'cotton':'flowers',
             'nigga':'good samaritan',
+            'nigger':'good samaritan',
             'gay' : 'happy',
             'damn' : 'gee golly',
             'lesbian' : 'gardyloo',
             'son of a bitch' : 'Jesus',
             'vagina' : 'rose',
-            'basterd':'child out of wedlock',
+            'bastard':'child out of wedlock',
             'ass' : 'pillion',
             'whore' : 'harlot',
             'bitch' : 'snap crackle pop',
             'shit' : 'flummery',
             'go to hell' : 'Prithee transport thyself to tarnation',
             'phuck':'balderdash',
-            'joe':'joe mama'}
+            'joe':'jerome mama',
+            'nino minecraft': 'nigger',
+            'trap':'man',
+            'traps':'men',
+            'stinky':'yummy',
+            'post':'square',
+            'ugly':'cute',
+            'cancer':'healthy',
+            'peyton':'geyton',
+            'ez':'that was really hard',
+            'rodrigo':'simp',
+            'milk':'kefir',
+            'dumpling':'pierogi',
+            'retard':'smart',
+            'jerk':'cut',
+            'not funny':'funny',
+            'instagram':'pornhub'}
+
+censor = True
+@bot.command(pass_context=True)
+async def toggle(ctx, arg):
+    global censor
+    if arg == "censorship":
+        censor = not censor
+    await ctx.send("Censorship is now: " + str(censor))
+
 
 @bot.command(pass_context=True)
 async def define(ctx, arg):
@@ -89,6 +120,8 @@ async def define(ctx, arg):
 #         speaking = False
 
 LIMIT = 1000000
+isCounting = False
+
 
 @bot.command(pass_context=True)
 async def count(ctx, arg):
@@ -96,7 +129,20 @@ async def count(ctx, arg):
     user_count = {}
     count = 0
     last_message = ""
+    global isCounting
+    if isCounting:
+        await ctx.send("Already processing messages")
+        return
+    await ctx.send("Processing messages...")
+    isCounting = True
+    await ctx.send("Parsed through 0 messages!")
+
+    progress_bar = ctx.channel.last_message
     async for message in ctx.channel.history(limit=LIMIT):
+        if count % 1000 == 0:
+            await progress_bar.edit(content="Parsed through " + str(count) + " messages!")
+
+
         if str(arg) in message.content:
             if message.author.name not in user_count:
                 user_count[message.author.name] = 0
@@ -112,6 +158,7 @@ async def count(ctx, arg):
     for i, j in user_count.items():
         results += i + ": " + str(j) + "\n"
     await ctx.send(results)
+    isCounting = False
     # await ctx.send(oldest)
 
 @bot.command(pass_context=True)
@@ -138,20 +185,23 @@ async def messages(ctx):
 
 @bot.event
 async def on_message(message):
+    global censor
     if message.author.id == bot.user.id:
         return
 
-    bad = False
-    new_sentence = " "
-    for word, replacement in censored.items():
-        if word in message.content and ("carnal, " not in message.content):
-            new_sentence = message.content.replace(word, replacement)
-            bad = True
-
-    if bad:
-        await message.channel.send(message.author.mention + ": " + new_sentence)
-        await message.delete(delay=None)
+    if censor:
         bad = False
+        new_sentence = message.content
+        for phrase in new_sentence.split(" "):
+            for word, replacement in censored.items():
+                if word in new_sentence and ("carnal, " not in new_sentence) and (not (message.id == bot.user.id)):
+                    new_sentence = new_sentence.replace(word, replacement)
+                    bad = True
+
+        if bad:
+            await message.channel.send(message.author.mention + ": " + new_sentence)
+            await message.delete(delay=None)
+            bad = False
 
         # Google API not working anymore, its a paid service now. $1 USD per 50,000 characters translated.
     # if speaking:
@@ -185,12 +235,12 @@ async def on_message(message):
 #             come.start()
 #             print("happened")
 #     print("The follow command Works")
-
- # @bot.command(pass_context=True)
- # async def stop(ctx, arg):
- #     if arg == "following":
- #         isFollowing = False
-
+#
+#  @bot.command(pass_context=True)
+#  async def stop(ctx, arg):
+#      if arg == "following":
+#          isFollowing = False
+#
 #
 # @tasks.loop(seconds=5.0)
 # async def come():
@@ -198,11 +248,36 @@ async def on_message(message):
 #     print(follow.voice.channel)
 #     #joins to the user "Follow".
 #     await follow.voice.channel.connect()
+#
+# async def followUser():
+#     voiceChannel = discord.follow.
+#     await voiceChannel.join();
+#
+#
+#
 
-#async def followUser():
-    #voiceChannel = discord.follow.
-    #await voiceChannel.join();
 
-
+# @bot.command(pass_context=True)
+# async def pong(ctx, arg, playerTwoID):
+#     line = {"                                                               ",
+#     "                                                               ",
+#     "                                                               ",
+#     "                                                               ",
+#     "                                                               ",
+#     "\|                                                             \|",
+#     "\|                                                             \|",
+#     "\|                                                             \|",
+#     "\|                                                             \|",
+#     "\|                                                             \|",
+#     "                                                               ",
+#     "                                                               ",
+#     "                                                               ",
+#     "                                                               ",
+#     "                                                               "}
+#     ctx.send(
+#          line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
+#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
+#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
+#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n")
 
 bot.run(TOKEN)
