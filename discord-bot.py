@@ -2,7 +2,7 @@
 # Feautures: Website, define, censorship, wordcount, count
 # Developing Feautures: Follow, count
 # Depricated Feautures: Speak, translate, synonymize, antonymize
-# Last Worked On: 08/03/2020
+# Last Worked On: 09/03/2020
 
 import random, discord, asyncio
 from discord.ext.commands import Bot
