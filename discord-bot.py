@@ -1,39 +1,26 @@
-# Developers: Stashito, Thinkr3, Dondischj
-# Feautures: Website, define, censorship, wordcount, count
+# Developers: Stashito, Thinkr3
+# Feautures: Nothing this is shit
 # Developing Feautures: Follow, count
 # Depricated Feautures: Speak, translate, synonymize, antonymize
-# Last Worked On: 09/03/2020
+# Last Worked On: 08/06/2020
 
 import random, discord, asyncio
 from discord.ext.commands import Bot
 from discord.ext import tasks
-from PyDictionary import PyDictionary
+# from PyDictionary import PyDictionary
 from discord.voice_client import VoiceClient
 from sys import stdout
-from sense_hat import SenseHat
-
-sense = SenseHat()
-
-pixels = [(70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255),
-	(70,70,255), (70,70,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (70,70,255), (70,70,255),
-	(70,70,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (70,70,255),
-	(70,70,255), (255,255,255), (70,70,255), (255,255,255), (255,255,255), (70,70,255), (255,255,255), (70,70,255),
-	(70,70,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (255,255,255), (70,70,255),
-	(70,70,255), (255,255,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (255,255,255), (70,70,255),
-	(70,70,255), (255,255,255), (255,255,255), (70,70,255), (70,70,255), (255,255,255), (255,255,255), (70,70,255),
-	(70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255), (70,70,255)]
-
-sense.set_pixels(pixels)
 
 
-dictionary=PyDictionary()
+
+# dictionary=PyDictionary()
 
 BOT_PREFIX = ("carnal, ")
-TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.Xmb5YQ.REtzrLSCiUPXqLlIn0TeE3pHz9E"
+TOKEN = "Njc3Njg5Nzk0OTY0NDg4MTky.XwO6Hw.9A5U5uYwkQ9bmVSW-8XmdhxbJdM"
 
 bot = Bot(command_prefix=BOT_PREFIX)
 
-@bot.event
+@commands.Cog.listener()
 async def on_ready(): #what happens when it opens
     print('Logged in as')
     print(bot.user.name)
@@ -108,31 +95,6 @@ async def define(ctx, arg):
     for i in dictionary.meaning(arg):
         print(i)
     await ctx.send(dictionary.meaning(arg))
-
-#API has no words, sucks.
-# @bot.command(pass_context=True)
-# async def synonymize(ctx, arg):
-#     await ctx.send(dictionary.synonym(arg))
-#
-# @bot.command(pass_context=True)
-# async def antonymize(ctx, arg):
-#     await ctx.send(dictionary.antonym(arg))
-
-#google translate free API depricated, now a paid service.
-# speaking = False
-# language = 'es'
-# @bot.command(pass_context=True)
-# async def speak(ctx, arg):
-#     global speaking, language
-#     speaking = True
-#     language = arg
-#     await ctx.send("Now speaking " + arg + "!")
-#
-# @bot.command(pass_context=True)
-# async def stop(ctx, arg):
-#     global speaking
-#     if arg == "speaking":
-#         speaking = False
 
 LIMIT = 1000000
 isCounting = False
@@ -270,29 +232,5 @@ async def on_message(message):
 #
 #
 #
-
-
-# @bot.command(pass_context=True)
-# async def pong(ctx, arg, playerTwoID):
-#     line = {"                                                               ",
-#     "                                                               ",
-#     "                                                               ",
-#     "                                                               ",
-#     "                                                               ",
-#     "\|                                                             \|",
-#     "\|                                                             \|",
-#     "\|                                                             \|",
-#     "\|                                                             \|",
-#     "\|                                                             \|",
-#     "                                                               ",
-#     "                                                               ",
-#     "                                                               ",
-#     "                                                               ",
-#     "                                                               "}
-#     ctx.send(
-#          line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
-#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
-#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n" + line[0] + "\n"
-#          + line[0] + "\n" + line[0] + "\n" + line[0] + "\n")
 
 bot.run(TOKEN)
