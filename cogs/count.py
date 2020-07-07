@@ -1,7 +1,7 @@
 # Developers: Stashito, Thinkr3
 # Feature: Checks how many times a user has said a certain words 
 # Parameter: String (word)
-# Last Worked On: 07/06/2020
+# Last Worked On: 08/06/2020
 
 import discord
 from discord.ext import commands

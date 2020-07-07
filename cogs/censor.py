@@ -2,7 +2,7 @@
 # Feature: Censors certain blasphemous words into their PG variant
 # Parameter: None
 # Toggle Parameter: toggle censorship (flips between true and false)
-# Last Worked On: 07/06/2020
+# Last Worked On: 08/07/2020
 
 import discord
 from discord.ext import commands

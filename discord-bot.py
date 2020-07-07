@@ -2,7 +2,7 @@
 # Feautures: Nothing this is shit
 # Developing Feautures: Follow, count
 # Depricated Feautures: Speak, translate, synonymize, antonymize
-# Last Worked On: 09/03/2020
+# Last Worked On: 08/06/2020
 
 import random, discord, asyncio
 from discord.ext.commands import Bot

@@ -1,7 +1,7 @@
 # Developers: Stashito, Thinkr3
 # Feature: Returns random website
 # Parameter: command "website"
-# Last Worked On: 07/06/2020
+# Last Worked On: 08/06/2020
 
 import random
 import discord

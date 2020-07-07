@@ -1,6 +1,6 @@
 # Developers: Stashito, Thinkr3, Dondischj
 # Feature: What happens when it opens
-# Last Worked On: 07/06/2020
+# Last Worked On: 08/06/2020
 
 import discord
 import os
