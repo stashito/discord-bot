@@ -6,7 +6,7 @@ import discord
 import os
 from discord.ext import commands
 
-client = commands.Bot(command_prefix = "carnal, ")
+client = commands.Bot(command_prefix = "cl ")
 
 @commands.Cog.listener()
 async def on_ready(): #Launch Method
@@ -31,5 +31,5 @@ async def reload(ctx, extension):
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
-
-client.run('Njc3Njg5Nzk0OTY0NDg4MTky.XwO6Hw.9A5U5uYwkQ9bmVSW-8XmdhxbJdM')
+with open("token.txt", "r") as f:
+    client.run(f.read())
