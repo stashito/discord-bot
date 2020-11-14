@@ -1,5 +1,5 @@
 # Discord Bot
-A discord bot using the Discord.py module by Rapptz, currently in development.
+A discord bot using the Discord.py module by Rapptz, currently in development. Made with [Thinkr3].
 
 ## Features:
 * Censorship
